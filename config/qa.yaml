@@ -1,0 +1,25 @@
+base_url:
+  api: "https://v41-api.k8s.flouat.net"
+  oauth2: "https://oauth2-api.k8s.flouat.net"
+  sabredav: "https://dav.k8s.flouat.net"
+  flodav: "https://flodav.k8s.flouat.net"
+  chime: "https://chime.k8s.flouat.net"
+  admin: "https://admin-api.k8s.flouat.net/intl-api"
+  cdn: "https://static-cdn.flouat.net"
+  storage: "https://storage.k8s.flouat.net"
+  auto_util: "https://auto-util.k8s.flouat.net"
+  realtime: "https://realtime.k8s.flouat.net"
+  subscriptions: "https://v41-api.k8s.flouat.net"
+  subscriptions_webhook: "https://flo-subscription.k8s.flouat.net"
+  web_api: "https://domailsvr.k8s.flouat.net/v0.1"
+
+web: "https://flo.k8s.flouat.net"
+
+user: "auto763e90_quang@flouat.net"
+password: "QWFAMTIzNDU="
+
+appium:
+  platformName: "iOS"
+  deviceName: "iPhone Dev"
+  udid: "auto"
+  app: "./apps/dev.app"

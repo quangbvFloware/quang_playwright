@@ -1,0 +1,64 @@
+.
+
+# Code Editor
+.idea/
+.vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.pytest_cache
+*.py[cod]
+*$py.class
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.benchmark/
+
+# pyenv
+.python-version
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Another
+*.iml
+out
+gen
+*.DS_Store
+/*/.DS_Store
+*.pyc
+/**/allure-*/
+pytestdebug.log
+/venv
+/resources/pem/*.pem
+.invalid_data
+.jenkins_reports
+a_*
+resources/pem
+tests/support*.py
+run*.sh
+rerun_*.txt
+
+#credentials
+config/jira_credentials.yml

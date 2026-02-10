@@ -1,0 +1,5 @@
+---
+web: (AUTO) Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+ios: (AUTO) Flo/0.9.44 (iPhone; build 202305101748; iOS Version 15.6.1; Scale/3.00; Device iPhone X)
+ipad: (AUTO) Flo/0.9.15 (iPad; build 23051101; iOS Version 14.2; Device iPad (8th generation)) Alamofire/4.9.1 com.floware.universalflo.staging
+mac: (AUTO) Flo/0.9.25 (Mac OS X; build 23050901; Mac OS X Version 11.6.0; Device MacBookPro16,2)

@@ -1,0 +1,25 @@
+base_url:
+  api: "https://v41-api.k8s.flostage.com"
+  oauth2: "https://oauth2-api.k8s.flostage.com"
+  sabredav: "https://dav.k8s.flostage.com"
+  flodav: "https://flodav.k8s.flostage.com"
+  chime: "https://chime.k8s.flostage.com"
+  admin: "https://admin-api.k8s.flostage.com/intl-api"
+  cdn: "https://static-cdn.flostage.com"
+  storage: "https://storage.k8s.flostage.com"
+  auto_util: "https://auto-util.k8s.flostage.com"
+  realtime: "https://realtime.k8s.flostage.com"
+  subscriptions: "https://v41-api.k8s.flostage.com"
+  subscriptions_webhook: "https://flo-subscription.k8s.flostage.com"
+  web_api: "https://domailsvr.k8s.flostage.com/v0.1"
+
+web: "https://flo.k8s.flostage.com"
+
+user: "auto763e90_quang@flostage.com"
+password: "QWFAMTIzNDU="
+
+appium:
+  platformName: "iOS"
+  deviceName: "iPhone Dev"
+  udid: "auto"
+  app: "./apps/dev.app"
