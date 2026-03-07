@@ -1,5 +1,13 @@
 from enum import Enum
 
+dir_caldav = "/calendarserver.php/calendars/"
+dir_carddav = "/addressbookserver.php/addressbooks/"
+
+ICON_REQUEST = "📨"
+ICON_RESPONSE = "⮑"
+ICON_PASSED = "✓"
+ICON_FAILED = "✘"
+ICON_WARNING = "⚠"
 
 class ClientType(Enum):
     """Client types"""

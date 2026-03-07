@@ -10,6 +10,7 @@ from framework.consts.consts_common import APIServiceType, ClientType
 from framework.core.config import ProjConfig
 from framework.mac.drivers.mac_driver import MacDriver
 from framework.mobile.drivers.appium_driver import AppiumDriver
+from framework.utils.logging_util import logger
 from framework.web.web_client import WebClient
 
 
@@ -54,7 +55,7 @@ class ClientExecutor:
     @classmethod
     def cleanup(cls):
         """Cleanup all clients and shutdown executor"""
-        print(f"\n🧹 Cleaning up {len(cls._clients)} clients...")
+        logger.debug(f"🧹 Cleaning up {len(cls._clients)} clients...")
         
         for client in cls._clients:
             try:
@@ -63,11 +64,11 @@ class ClientExecutor:
                 elif hasattr(client, 'quit'):
                     client.quit()
             except Exception as e:
-                print(f"Error closing client: {e}")
+                logger.error(f"Error closing client: {e}")
         
         if cls._executor:
             cls._executor.shutdown(wait=True)
-            print("✓ All clients cleaned up")
+            logger.debug("✓ All clients cleaned up")
 
 
 def _create_api_client_sync(
@@ -171,7 +172,7 @@ def _create_web_client_sync(
         password=password,
         auto_login=auto_login
     )
-    ClientExecutor.track_client(client)
+    # ClientExecutor.track_client(client)
     return client
 
 
@@ -207,26 +208,27 @@ def setup_web_client(
         >>> future3 = setup_web_client('user3@test.com', 'pass')
         >>> 
         >>> # Continue with other work...
-        >>> print("Browsers starting in background...")
+        >>> logger.debug("Browsers starting in background...")
         >>> 
         >>> # Wait when needed
         >>> client1 = future1.result()
         >>> client2 = future2.result()
         >>> client3 = future3.result()
-        >>> print("All browsers ready!")
+        >>> logger.debug("All browsers ready!")
     """
-    future = ClientExecutor.submit(
-        _create_web_client_sync,
-        user, password,
-        browser=browser,
-        headless=headless,
-        auto_login=auto_login,
-        **kwargs
-    )
+    # future = ClientExecutor.submit(
+    #     _create_web_client_sync,
+    #     user, password,
+    #     browser=browser,
+    #     headless=headless,
+    #     auto_login=auto_login,
+    #     **kwargs
+    # )
     
-    if wait:
-        return future.result()
-    return future
+    # if wait:
+    #     return future.result()
+    # return future
+    return _create_web_client_sync(user, password, browser, headless, auto_login, **kwargs)
 
 
 def _create_mac_client_sync(
@@ -339,11 +341,11 @@ def setup_client(
         >>> f4 = setup_client('mac', bundle_id='com.app')
         >>> f5 = setup_client('iphone')
         >>> 
-        >>> print("All 5 clients starting in parallel...")
+        >>> logger.debug("All 5 clients starting in parallel...")
         >>> 
         >>> # Wait for all
         >>> clients = [f.result() for f in [f1, f2, f3, f4, f5]]
-        >>> print("All clients ready!")
+        >>> logger.debug("All clients ready!")
     """
     if isinstance(client_type, str):
         try:
@@ -380,7 +382,7 @@ def wait_all(*futures: Future):
         >>> f3 = setup_client('mac')
         >>> 
         >>> clients = wait_all(f1, f2, f3)
-        >>> print(f"Got {len(clients)} clients")
+        >>> logger.debug(f"Got {len(clients)} clients")
     """
     return [f.result() for f in futures]
 
@@ -396,7 +398,7 @@ def as_completed(*futures: Future):
         ... ]
         >>> 
         >>> for i, client in enumerate(as_completed(*futures), 1):
-        ...     print(f"Client {i}/10 ready")
+        ...     logger.debug(f"Client {i}/10 ready")
     """
     from concurrent.futures import as_completed as _as_completed
     for future in _as_completed(futures):

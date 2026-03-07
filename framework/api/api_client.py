@@ -113,16 +113,16 @@ class ServiceClient:
             endpoint_file = Path(__file__).parent.parent.parent / 'resources' / 'yaml' / 'endpoint.yaml'
             
             if not endpoint_file.exists():
-                print(f"Warning: endpoint.yaml not found at {endpoint_file}")
+                logger.warning(f"Warning: endpoint.yaml not found at {endpoint_file}")
                 cls._all_endpoints_cache = {}
                 return {}
             
             try:
                 with open(endpoint_file, 'r') as f:
                     cls._all_endpoints_cache = yaml.safe_load(f) or {}
-                print(f"✓ Loaded endpoints from {endpoint_file.name}")
+                logger.debug(f"✓ Loaded endpoints from {endpoint_file.name}")
             except Exception as e:
-                print(f"Error loading endpoints: {e}")
+                logger.error(f"Error loading endpoints: {e}")
                 cls._all_endpoints_cache = {}
             
             return cls._all_endpoints_cache
@@ -139,7 +139,7 @@ class ServiceClient:
         self._endpoints = all_endpoints.get(self.service_name, {})
         
         if not self._endpoints:
-            print(f"Warning: No endpoints found for service '{self.service_name}'")
+            logger.warning(f"Warning: No endpoints found for service '{self.service_name}'")
     
     def __getattr__(self, name):
         """Lazy load endpoint khi được gọi"""
