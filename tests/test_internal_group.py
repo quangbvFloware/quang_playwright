@@ -2,6 +2,7 @@
 Test InternalGroup enum
 """
 from framework.consts.consts_common import InternalGroup
+from framework.utils.logging_util import logger
 
 
 def test_internal_group_values():
@@ -43,7 +44,7 @@ def test_internal_group_access_patterns():
     assert group_id == 1
     assert group_prefix == "web763e90"
     
-    print(f"✓ {group.name}: id={group.id}, prefix={group.prefix}")
+    logger.debug(f"✓ {group.name}: id={group.id}, prefix={group.prefix}")
 
 
 def test_internal_group_iteration():
@@ -56,7 +57,7 @@ def test_internal_group_iteration():
         assert isinstance(group.id, int)
         assert isinstance(group.prefix, str)
         assert group.prefix.endswith("763e90")
-        print(f"  {group.name}: id={group.id}, prefix={group.prefix}")
+        logger.debug(f"  {group.name}: id={group.id}, prefix={group.prefix}")
 
 
 if __name__ == '__main__':

@@ -77,6 +77,13 @@ def check_user_exist(user="", **kwargs):
     return _status
 
 
+def make_user_exist(user="", **kwargs):
+    if not check_user_exist(user, **kwargs):
+        new_token(user, **kwargs)
+        user_registry.mark_exists(user, exists=True)
+    return user
+
+
 def new_token(user="", password="", internal_group=0, headers=None, **kwargs):
     _headers = headers or headers_app(username=user)
     resp = requests.post(

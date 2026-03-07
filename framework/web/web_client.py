@@ -37,7 +37,7 @@ class WebClient:
         self.email = email or ProjConfig.get_config('user')
         self.username = email.partition('@')[0]
         self.password = password or ProjConfig.get_config('password')
-        self.base_url = ProjConfig.get_config('base_url')['web']
+        self.base_url = ProjConfig.get_config('web')
         
         # Khởi tạo login page
         self.login_page = WebLoginPage(self.page)
