@@ -2,30 +2,35 @@
 from playwright.sync_api import sync_playwright
 
 
+class PlaywrightManager:
+    """Singleton - chỉ start sync_playwright() MỘT LẦN duy nhất"""
+    _pw = None
+    
+    @classmethod
+    def get(cls):
+        if cls._pw is None:
+            cls._pw = sync_playwright().start()
+        return cls._pw
+    
+    @classmethod
+    def stop(cls):
+        if cls._pw:
+            cls._pw.stop()
+            cls._pw = None
 class WebDriver:
     def __init__(self, browser='chromium', headless=True):
-        """
-        Args:
-            browser: 'chromium', 'firefox', hoặc 'webkit'
-            headless: Chạy headless mode hay không
-        """
-        self._pw = sync_playwright().start()
+        pw = PlaywrightManager.get()  # Dùng chung 1 instance
         
-        # Chọn browser type
         if browser == 'chromium':
-            self.browser = self._pw.chromium.launch(headless=headless)
+            self.browser = pw.chromium.launch(headless=headless)
         elif browser == 'firefox':
-            self.browser = self._pw.firefox.launch(headless=headless)
+            self.browser = pw.firefox.launch(headless=headless)
         elif browser == 'webkit':
-            self.browser = self._pw.webkit.launch(headless=headless)
+            self.browser = pw.webkit.launch(headless=headless)
         else:
             raise ValueError(f"Unsupported browser: {browser}")
         
         self.page = self.browser.new_page()
-
-    def goto(self, url):
-        return self.page.goto(url)
-
     def quit(self):
         self.browser.close()
-        self._pw.stop()
+        # KHÔNG gọi self._pw.stop() nữa - PlaywrightManager.stop() sẽ xử lý khi cần

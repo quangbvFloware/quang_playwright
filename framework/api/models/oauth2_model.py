@@ -10,5 +10,4 @@ def payload_auth(username="", password="", grant_type="password", **kwargs):
         password=encrypt_util.encrypt_rsa_base64(_password, _public_key),
         grant_type=grant_type
     ) | kwargs
-
     return payload

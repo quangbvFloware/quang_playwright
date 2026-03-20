@@ -1,0 +1,8 @@
+{
+    "platformName": "iOS",
+    "automationName": "XCUITest",
+    "deviceName": "iPhone 14",
+    "platformVersion": "17.0",
+    "app": "/path/to/your/app.ipa",
+    "noReset": true
+}

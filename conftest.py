@@ -17,6 +17,9 @@ _logging = None
 
 def pytest_addoption(parser):
     general = parser.getgroup("General")
+    api = parser.getgroup("API")
+    web = parser.getgroup("Web")
+    # General options
     general.addoption(
         "--env",
         action="store",
@@ -31,6 +34,18 @@ def pytest_addoption(parser):
         help="Choose test user",
     )
     general.addoption(
+        "--user2",
+        action="store",
+        default="",
+        help="Choose test user2",
+    )
+    general.addoption(
+        "--user3",
+        action="store",
+        default="",
+        help="Choose test user3",
+    )
+    general.addoption(
         "--password",
         action="store",
         default="",
@@ -42,18 +57,7 @@ def pytest_addoption(parser):
         default=False,
         help="Choose test debug log",
     )
-    general.addoption(
-        "--headless",
-        action="store_true",
-        default=False,
-        help="Choose test headless",
-    )
-    general.addoption(
-        "--new_public_key",
-        action="store_true",
-        default=False,
-        help="Choose test new public key",
-    )
+    # API options
     general.addoption(
         "--api_app",
         action="store",
@@ -65,6 +69,25 @@ def pytest_addoption(parser):
         action="store",
         default=None,
         help="Choose test device uid",
+    )
+    general.addoption(
+        "--new_public_key",
+        action="store_true",
+        default=False,
+        help="Choose test new public key",
+    )
+    # Web options
+    web.addoption(
+        "--web_browser",
+        action="store",
+        default="chromium",
+        help="Choose test browser",
+    )
+    web.addoption(
+        "--headless",
+        action="store_true",
+        default=False,
+        help="Choose test headless",
     )
 
 

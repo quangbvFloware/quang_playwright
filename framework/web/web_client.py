@@ -1,5 +1,6 @@
 from playwright.sync_api import expect
 
+from framework.api.helpers import auth_helper
 from framework.core.config import ProjConfig
 from framework.utils import encrypt_util
 from framework.web.drivers.web_driver import WebDriver
@@ -50,9 +51,14 @@ class WebClient:
         """Đăng nhập vào hệ thống"""
         username = username or self.username
         password = password or self.password
+        auth_helper.make_user_exist(user=username, password=password)
         
         self.login_page.open(self.base_url)
         self.login_page.login(username, password)
+        
+        is_ready = self.is_visible('#tab-bar')
+        if not is_ready and self.is_visible_by_text(".btn .btn-later", "Later"):
+            self.click(".btn .btn-later")
         
         # Verify login thành công
         expect(self.page.locator('#tab-bar')).to_be_visible(timeout=15000)
@@ -101,6 +107,10 @@ class WebClient:
     def is_visible(self, selector):
         """Check element có visible không"""
         return self.page.locator(selector).is_visible()
+    
+    def is_visible_by_text(self, selector, text):
+        """Check element có visible không"""
+        return self.page.locator(selector).get_by_text(text).is_visible()
     
     # ===== Page Object Access =====
     @property

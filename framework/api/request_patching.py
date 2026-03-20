@@ -203,7 +203,7 @@ def patched_request(f):
         params_str = handle_params_string(params) if params else ""
         endpoint = urllib.parse.urlparse(path).path
         api_url = f"[{method.upper()} {endpoint}{params_str}]"
-        api_info = f"[{username} - API client] [{service}] {api_url}"
+        api_info = f"[API Client - {username}] [{service}] {api_url}"
 
         # Resolve path
         for retry in range(retries):

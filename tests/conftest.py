@@ -73,80 +73,85 @@ def api_clients(proj_config):
     Note: First access creates client, subsequent accesses return cached instance.
     """
     return DotDict(
-        owner=dict(
+        user1=dict(
             function=setup_api_client,
             user=proj_config["user"],
             password=proj_config["password"],
         ),
-        member=dict(
+        user2=dict(
             function=setup_api_client,
-            user=proj_config["member_prefix"] + "1" + proj_config["domain"],
+            user=proj_config["user2"],
             password=proj_config["password"],
         ),
-        member_2=dict(
+        user3=dict(
             function=setup_api_client,
-            user=proj_config["member_prefix"] + "2" + proj_config["domain"],
+            user=proj_config["user3"],
             password=proj_config["password"],
         ),
     )
 
 
 # ========================================
-# WEB CLIENTS - owner, member, member_2
+# WEB CLIENTS - user1, user2, user3
 # ========================================
 
 
 @pytest.fixture(scope="session")
-def web_clients(proj_config, runtime_profile):
+def web_clients(proj_config, runtime_profile, request):
     """
     Web clients with unified structure (DotDict with auto-execution)
 
     Structure:
-        - owner: Main user web browser
-        - member: Member 1 web browser
-        - member_2: Member 2 web browser
+        - user1: Main user web browser
+        - user2: Member 1 web browser
+        - user3: Member 2 web browser
 
     Usage (DotDict auto-executes setup function):
         >>> def test_web(web_clients):
         >>>     # Simple access - DotDict automatically calls setup_web_client()
-        >>>     owner = web_clients.owner
+        >>>     user1 = web_clients.user1
         >>>     # owner is now a WebClient instance - use directly!
-        >>>     owner.channel_page.create_channel("Test")
+        >>>     user1.channel_page.create_channel("Test")
         >>>
         >>>     # Multiple browsers - automatic parallel execution
-        >>>     owner = web_clients.owner
-        >>>     member = web_clients.member
-        >>>     member_2 = web_clients.member_2
+        >>>     user1 = web_clients.user1
+        >>>     user2 = web_clients.user2
+        >>>     user3 = web_clients.user3
         >>>     # All 3 browsers start in parallel automatically!
 
     Note: First access creates browser, subsequent accesses return cached instance.
     """
     headless = runtime_profile.get("headless", False)
 
-    return DotDict(
-        owner=dict(
+    yield DotDict(
+        user1=dict(
             function=setup_web_client,
             user=proj_config["user"],
+            browser=runtime_profile.get("web_browser", "chromium"),
             password=proj_config["password"],
             headless=headless,
         ),
-        member=dict(
+        user2=dict(
             function=setup_web_client,
-            user=proj_config["member_prefix"] + "1" + proj_config["domain"],
+            user=proj_config["user2"],
+            browser=runtime_profile.get("web_browser", "chromium"),
             password=proj_config["password"],
             headless=headless,
         ),
-        member_2=dict(
+        user3=dict(
             function=setup_web_client,
-            user=proj_config["member_prefix"] + "2" + proj_config["domain"],
+            user=proj_config["user3"],
+            browser=runtime_profile.get("web_browser", "chromium"),
             password=proj_config["password"],
             headless=headless,
         ),
     )
+    from framework.web.drivers.web_driver import PlaywrightManager
+    PlaywrightManager.stop()
 
 
 # ========================================
-# MAC CLIENTS - owner, member, member_2
+# MAC CLIENTS - user1, user2, user3
 # ========================================
 
 
@@ -156,39 +161,40 @@ def mac_clients(proj_config):
     Mac clients with unified structure (DotDict with auto-execution)
 
     Structure:
-        - owner: Mac instance 1
-        - member: Mac instance 2
-        - member_2: Mac instance 3
+        - user1: Mac instance 1
+        - user2: Mac instance 2
+        - user3: Mac instance 3
 
     Usage (DotDict auto-executes setup function):
         >>> def test_mac(mac_clients):
         >>>     # Simple access - DotDict automatically calls setup_mac_client()
-        >>>     owner = mac_clients.owner
-        >>>     # owner is now a MacDriver instance - use directly!
-        >>>     owner.click_element('button')
+        >>>     user1 = mac_clients.user1
+        >>>     # user1 is now a MacDriver instance - use directly!
+        >>>     user1.click_element('button')
         >>>
         >>>     # Multiple Macs - automatic parallel execution
-        >>>     owner = mac_clients.owner
-        >>>     member = mac_clients.member
+        >>>     user1 = mac_clients.user1
+        >>>     user2 = mac_clients.user2
+        >>>     user3 = mac_clients.user3
         >>>     # Both start in parallel automatically!
 
     Note: First access creates driver, subsequent accesses return cached instance.
     """
     return DotDict(
-        owner=dict(
+        user1=dict(
             function=setup_mac_client, bundle_id=None, caps_file="mac_caps.json"
         ),
-        member=dict(
+        user2=dict(
             function=setup_mac_client, bundle_id=None, caps_file="mac_caps.json"
         ),
-        member_2=dict(
+        user3=dict(
             function=setup_mac_client, bundle_id=None, caps_file="mac_caps.json"
         ),
     )
 
 
 # ========================================
-# IPHONE CLIENTS - owner, member, member_2
+# IPHONE CLIENTS - user1, user2, user3
 # ========================================
 
 
@@ -198,48 +204,49 @@ def iphone_clients(proj_config):
     iPhone clients with unified structure (DotDict with auto-execution)
 
     Structure:
-        - owner: iPhone instance 1
-        - member: iPhone instance 2
+        - user1: iPhone instance 1
+        - user2: iPhone instance 2
         - member_2: iPhone instance 3
 
     Usage (DotDict auto-executes setup function):
         >>> def test_iphone(iphone_clients):
         >>>     # Simple access - DotDict automatically calls setup_ios_client()
-        >>>     owner = iphone_clients.owner
-        >>>     # owner is now an AppiumDriver instance - use directly!
+        >>>     user1 = iphone_clients.user1
+        >>>     # user1 is now an AppiumDriver instance - use directly!
         >>>     owner.find_element('app_icon').click()
         >>>
         >>>     # Multiple iPhones - automatic parallel execution
-        >>>     owner = iphone_clients.owner
-        >>>     member = iphone_clients.member
-        >>>     # Both start in parallel automatically!
+        >>>     user1 = iphone_clients.user1
+        >>>     user2 = iphone_clients.user2
+        >>>     user3 = iphone_clients.user3
+        >>>     # All 3 start in parallel automatically!
 
     Note: First access creates driver, subsequent accesses return cached instance.
     """
     return DotDict(
-        owner=dict(
+        user1=dict(
             function=setup_ios_client,
             device_type="iphone",
             device_name=None,
-            caps_file="ios_caps.json",
+            caps_file="iphone_caps.json",
         ),
-        member=dict(
+        user2=dict(
             function=setup_ios_client,
             device_type="iphone",
             device_name=None,
-            caps_file="ios_caps.json",
+            caps_file="iphone_caps.json",
         ),
-        member_2=dict(
+        user3=dict(
             function=setup_ios_client,
             device_type="iphone",
             device_name=None,
-            caps_file="ios_caps.json",
+            caps_file="iphone_caps.json",
         ),
     )
 
 
 # ========================================
-# IPAD CLIENTS - owner, member, member_2
+# IPAD CLIENTS - user1, user2, user3
 # ========================================
 
 
@@ -249,43 +256,43 @@ def ipad_clients(proj_config):
     iPad clients with unified structure (DotDict with auto-execution)
 
     Structure:
-        - owner: iPad (9th generation)
-        - member: iPad (10th generation)
-        - member_2: iPad Pro
+        - user1: iPad (9th generation)
+        - user2: iPad (10th generation)
+        - user3: iPad Pro
 
     Usage (DotDict auto-executes setup function):
         >>> def test_ipad(ipad_clients):
         >>>     # Simple access - DotDict automatically calls setup_ios_client()
-        >>>     owner = ipad_clients.owner
-        >>>     # owner is now an AppiumDriver instance - use directly!
-        >>>     owner.find_element('app_icon').click()
+        >>>     user1 = ipad_clients.user1
+        >>>     # user1 is now an AppiumDriver instance - use directly!
+        >>>     user1.find_element('app_icon').click()
         >>>
         >>>     # Multiple iPads - automatic parallel execution
-        >>>     owner = ipad_clients.owner  # iPad 9th gen
-        >>>     member = ipad_clients.member  # iPad 10th gen
-        >>>     member_2 = ipad_clients.member_2  # iPad Pro
+        >>>     user1 = ipad_clients.user1  # iPad 9th gen
+        >>>     user2 = ipad_clients.user2  # iPad 10th gen
+        >>>     user3 = ipad_clients.user3  # iPad Pro
         >>>     # All 3 start in parallel automatically!
 
     Note: First access creates driver, subsequent accesses return cached instance.
     """
     return DotDict(
-        owner=dict(
+        user1=dict(
             function=setup_ios_client,
             device_type="ipad",
             device_name="iPad (9th generation)",
-            caps_file="ios_caps.json",
+            caps_file="ipad_caps.json",
         ),
-        member=dict(
+        user2=dict(
             function=setup_ios_client,
             device_type="ipad",
             device_name="iPad (10th generation)",
-            caps_file="ios_caps.json",
+            caps_file="ipad_caps.json",
         ),
-        member_2=dict(
+        user3=dict(
             function=setup_ios_client,
             device_type="ipad",
             device_name="iPad Pro (12.9-inch)",
-            caps_file="ios_caps.json",
+            caps_file="ipad_caps.json",
         ),
     )
 
@@ -299,12 +306,12 @@ def ipad_clients(proj_config):
 def mac(mac_clients):
     """
     Legacy mac fixture - for backward compatibility
-    Uses mac_clients.owner (DotDict auto-executes setup_mac_client)
+    Uses mac_clients.user1 (DotDict auto-executes setup_mac_client)
 
     Note: The unified fixture pattern is preferred.
     Use mac_clients directly for better control.
     """
-    driver = mac_clients.owner  # DotDict auto-executes and returns driver
+    driver = mac_clients.user1  # DotDict auto-executes and returns driver
     yield driver
     try:
         driver.quit()
@@ -316,12 +323,12 @@ def mac(mac_clients):
 def iphone(iphone_clients):
     """
     Legacy iphone fixture - for backward compatibility
-    Uses iphone_clients.owner (DotDict auto-executes setup_ios_client)
+    Uses iphone_clients.user1 (DotDict auto-executes setup_ios_client)
 
     Note: The unified fixture pattern is preferred.
     Use iphone_clients directly for better control.
     """
-    driver = iphone_clients.owner  # DotDict auto-executes and returns driver
+    driver = iphone_clients.user1  # DotDict auto-executes and returns driver
     yield driver
     driver.quit()
 
@@ -330,12 +337,12 @@ def iphone(iphone_clients):
 def ipad(ipad_clients):
     """
     Legacy ipad fixture - for backward compatibility
-    Uses ipad_clients.owner (DotDict auto-executes setup_ios_client)
+    Uses ipad_clients.user1 (DotDict auto-executes setup_ios_client)
 
     Note: The unified fixture pattern is preferred.
     Use ipad_clients directly for better control.
     """
-    driver = ipad_clients.owner  # DotDict auto-executes and returns driver
+    driver = ipad_clients.user1  # DotDict auto-executes and returns driver
     yield driver
     driver.quit()
 
@@ -344,16 +351,16 @@ def ipad(ipad_clients):
 def ios(request, iphone_clients, ipad_clients):
     """
     Legacy ios fixture with parameterization - for backward compatibility
-    Maps to iphone_clients.owner or ipad_clients.owner based on param
+    Maps to iphone_clients.user1 or ipad_clients.user1 based on param
     (DotDict auto-executes setup_ios_client)
 
     Note: The unified fixture pattern is preferred.
     Use iphone_clients/ipad_clients directly for better control.
     """
     if request.param == "iphone":
-        driver = iphone_clients.owner  # DotDict auto-executes
+        driver = iphone_clients.user1  # DotDict auto-executes
     else:
-        driver = ipad_clients.owner  # DotDict auto-executes
+        driver = ipad_clients.user1  # DotDict auto-executes
 
     yield driver
     driver.quit()

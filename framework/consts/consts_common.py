@@ -3,11 +3,17 @@ from enum import Enum
 dir_caldav = "/calendarserver.php/calendars/"
 dir_carddav = "/addressbookserver.php/addressbooks/"
 
-ICON_REQUEST = "📨"
-ICON_RESPONSE = "⮑"
-ICON_PASSED = "✓"
-ICON_FAILED = "✘"
-ICON_WARNING = "⚠"
+ICON_API = "🔌" # API Client
+ICON_WEB = "🌐" # Web Client
+ICON_MAC = "💻" # Mac Client
+ICON_IPHONE = "📱" # iPhone Client
+ICON_IPAD = "🖥️" # iPad Client
+
+ICON_REQUEST = "📨" # Request
+ICON_RESPONSE = "⮑" # Response
+ICON_PASSED = "✓" # Passed
+ICON_FAILED = "✘" # Failed
+ICON_WARNING = "⚠" # Warning
 
 class ClientType(Enum):
     """Client types"""

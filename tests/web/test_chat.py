@@ -7,11 +7,12 @@ from framework.web.pages.login_page import WebLoginPage
 
 def test_chat(api_clients, web_clients):
     # Start both API and Web clients in parallel (truly parallel!)
-    # owner_api, owner_web = parallel_get(
-    #     (api_clients, 'owner'),
-    #     (web_clients, 'owner')
+    # web_user1, web_user2 = parallel_get(
+        # (api_clients, 'user1'),
+        # (web_clients, 'user1'),
+        # (web_clients, 'user2')
     # )
-    owner_api = api_clients.owner
-    # owner_web = web_clients.owner
-    owner_api.api.collections.get(dict(page_size=10, modified_gte=0))
-    # owner_web.channel_page.open_panel()
+    web_user1 = web_clients.user1
+    web_user2 = web_clients.user2
+    # owner_api.api.collections.get(dict(page_size=10, modified_gte=0))
+    web_user1.channel_page.open_panel()
