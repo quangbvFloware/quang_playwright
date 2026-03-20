@@ -16,6 +16,8 @@ base_url:
 web: "https://flo.k8s.flodev.net"
 
 user: "auto763e90_quang@flodev.net"
+user2: "auto763e90_quang_mem1@flodev.net"
+user3: "auto763e90_quang_mem2@flodev.net"
 password: "QWFAMTIzNDU="
 
 appium:

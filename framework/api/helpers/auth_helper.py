@@ -7,7 +7,7 @@ import requests
 
 from framework.api.models.oauth2_model import payload_auth
 from framework.api.url_builder import build_url
-from framework.consts.consts_common import InternalGroup
+from framework.consts.consts_common import ICON_API, InternalGroup
 from framework.consts.project import RESOURCES_PEM_DIR
 from framework.core.config import ProjConfig
 from framework.core.user_registry import UserRegistry
@@ -68,24 +68,31 @@ def headers_app(*, device_uid="", app_id="", user_agent=None, username=None, exp
 
 
 def check_user_exist(user="", **kwargs):
-    _status = user_registry.is_verified(user) or requests.post(
+    email = user if "@" in user else f"{user}{ProjConfig.get_config('domain')}"
+    _status = user_registry.is_verified(email) or requests.post(
         url=kwargs.get("url") or build_url('oauth2', 'checkemail'),
-        headers=kwargs.get("headers") or headers_app(username=user),
-        json=dict(email=user),
+        headers=kwargs.get("headers") or headers_app(username=email),
+        json=dict(email=email),
     ).json()["data"]["is_exist"]
-    user_registry.mark_exists(user, exists=_status)
+    user_registry.mark_exists(email, exists=_status)
+    logger.info(f"{ICON_API} [API Client - {email}] Check user exist: {_status}")
     return _status
 
 
-def make_user_exist(user="", **kwargs):
-    if not check_user_exist(user, **kwargs):
-        new_token(user, **kwargs)
-        user_registry.mark_exists(user, exists=True)
-    return user
+def make_user_exist(user="", password="", **kwargs):
+    email = user if "@" in user else f"{user}{ProjConfig.get_config('domain')}"
+    check_exist = check_user_exist(email, **kwargs)
+    if not check_exist:
+        new_token(user=email, password=password, **kwargs)
+        user_registry.mark_exists(email, exists=True)
+    return dict(email=email, was_existed=check_exist)
 
 
-def new_token(user="", password="", internal_group=0, headers=None, **kwargs):
+def new_token(user="", password="", internal_group=0, headers=None, public_key=None, **kwargs):
+    logger.info(f"{ICON_API} [API Client - {user}] Signing up user: {user} ... ")
     _headers = headers or headers_app(username=user)
+    _config = ProjConfig.get_config(load_api=True)
+    public_key = public_key or _config.get("public_key", None) or get_public_key(_config["env"])
     resp = requests.post(
         url=kwargs.pop("url", None) or build_url('oauth2', 'signup'),
         headers=_headers,
@@ -93,7 +100,7 @@ def new_token(user="", password="", internal_group=0, headers=None, **kwargs):
             username=user,
             password=password,
             **dict(internal_group=internal_group) if internal_group else dict(),
-            public_key=kwargs.get("public_key"),
+            public_key=public_key,
         ),
     )
     _status_code = resp.status_code
@@ -108,6 +115,7 @@ def new_token(user="", password="", internal_group=0, headers=None, **kwargs):
 
 
 def get_token(user="", password="", is_2fa=False, headers=None, is_web=False, **kwargs):
+    logger.info(f"{ICON_API} [API Client - {user}] Logging in user: {user} ... ")
     _headers = headers or headers_app(username=user)
     if is_web:
         return access_token_web(user=user, password=password, headers=_headers)
@@ -126,12 +134,13 @@ def get_token(user="", password="", is_2fa=False, headers=None, is_web=False, **
             json=dict(totp_token=otp),
         )
     else:
+        _config = ProjConfig.get_config(load_api=True)
+        public_key = kwargs.get("public_key") or _config.get("public_key", None) or get_public_key(_config["env"])
         resp = requests.post(
             url=kwargs.pop("url", None) or build_url('oauth2', 'token'),
             headers=_headers,
-            json=payload_auth(username=user, password=password, public_key=kwargs.get("public_key")),
+            json=payload_auth(username=user, password=password, public_key=public_key),
         )
-
     token = resp.json()["data"]["access_token"]
     token_type = resp.json()["data"].get("token_type") or "Bearer"
     _headers["authorization"] = f"{token_type} {token}"

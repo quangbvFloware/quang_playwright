@@ -1,5 +1,6 @@
 # framework/setup_client.py
 import atexit
+import threading
 from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from threading import Lock
@@ -170,7 +171,8 @@ def _create_web_client_sync(
         headless=headless,
         email=user,
         password=password,
-        auto_login=auto_login
+        auto_login=auto_login,
+        **kwargs
     )
     # ClientExecutor.track_client(client)
     return client
@@ -198,36 +200,8 @@ def setup_web_client(
         auto_login: Auto login after creation
     
     Returns:
-        If wait=True: WebClient instance
-        If wait=False: Future object
-    
-    Example:
-        >>> # Parallel execution - 3 browsers starting simultaneously
-        >>> future1 = setup_web_client('user1@test.com', 'pass')
-        >>> future2 = setup_web_client('user2@test.com', 'pass')
-        >>> future3 = setup_web_client('user3@test.com', 'pass')
-        >>> 
-        >>> # Continue with other work...
-        >>> logger.debug("Browsers starting in background...")
-        >>> 
-        >>> # Wait when needed
-        >>> client1 = future1.result()
-        >>> client2 = future2.result()
-        >>> client3 = future3.result()
-        >>> logger.debug("All browsers ready!")
+        WebClient instance
     """
-    # future = ClientExecutor.submit(
-    #     _create_web_client_sync,
-    #     user, password,
-    #     browser=browser,
-    #     headless=headless,
-    #     auto_login=auto_login,
-    #     **kwargs
-    # )
-    
-    # if wait:
-    #     return future.result()
-    # return future
     return _create_web_client_sync(user, password, browser, headless, auto_login, **kwargs)
 
 

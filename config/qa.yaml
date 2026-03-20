@@ -16,6 +16,8 @@ base_url:
 web: "https://flo.k8s.flouat.net"
 
 user: "auto763e90_quang@flouat.net"
+user2: "auto763e90_quang_mem1@flouat.net"
+user3: "auto763e90_quang_mem2@flouat.net"
 password: "QWFAMTIzNDU="
 
 appium:

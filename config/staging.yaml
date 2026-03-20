@@ -16,6 +16,8 @@ base_url:
 web: "https://flo.k8s.flostage.com"
 
 user: "auto763e90_quang@flostage.com"
+user2: "auto763e90_quang_mem1@flostage.com"
+user3: "auto763e90_quang_mem2@flostage.com"
 password: "QWFAMTIzNDU="
 
 appium:

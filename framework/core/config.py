@@ -64,12 +64,18 @@ class ProjConfig:
                 
                 cls._config["username"] = cls._config["user"].partition("@")[0]
                 cls._config["member_prefix"] = cls._config["username"] + "_mem"
-                cls._config["member_user"] = (
-                    (f"{cls._config['user_member']}{cls._config['domain']}" if "@" not in cls._runtime["member_user"] else cls._config["user_member"])
-                    if "member_user" in cls._runtime
-                    else f"{cls._config['member_prefix'] + '1'}{cls._config['domain']}" 
+                cls._config["user2"] = (
+                    (f"{cls._config['user2']}{cls._config['domain']}" if "@" not in cls._runtime["user2"] else cls._config["user2"])
+                    if "user2" in cls._runtime
+                    else cls._config["user2"]
                 )
-                cls._config["member_username"] = cls._config["member_user"].partition("@")[0]
+                cls._config["user2_username"] = cls._config["user2"].partition("@")[0]
+                cls._config["user3"] = (
+                    (f"{cls._config['user3']}{cls._config['domain']}" if "@" not in cls._runtime["user3"] else cls._config["user3"])
+                    if "user3" in cls._runtime
+                    else cls._config["user3"]
+                )
+                cls._config["user3_username"] = cls._config["user3"].partition("@")[0]
                 
                 cls._config["password"] = cls._config["password"] if "password" in cls._runtime else encrypt_util.decode_base64(cls._config["password"])
                 cls._config_loaded = True
